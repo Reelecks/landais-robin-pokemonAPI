@@ -5,14 +5,27 @@ function PokemonList({ searchTerm = "" }) {
   const [pokemons, setPokemons] = useState([]);
 
   useEffect(() => {
-    getData();
+    getDataList();
   }, []);
   
-  async function getData() {
+  async function getDataList() {
     const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100");
     const data = await res.json(); 
     console.log("data", data.results);
-    setPokemons(data.results); 
+    setPokemons(await getSprite(data.results)); 
+  }
+  async function getSprite(pokemons) {
+    const pokemonWithSprites = await Promise.all(
+      pokemons.map(async (pokemon) => {
+        const res = await fetch(pokemon.url);
+        const data = await res.json();
+        return {
+          ...pokemon,
+          image: data.sprites.front_default,
+        };
+      })
+    );
+    return pokemonWithSprites;
   }
 
   const filteredPokemons = pokemons.filter((pokemon) =>
@@ -24,7 +37,10 @@ function PokemonList({ searchTerm = "" }) {
 
     <ul>
     {filteredPokemons.map((pokemon) => (
-      <li key={pokemon.name}>{pokemon.name}</li>
+      <li key={pokemon.name}>
+          <img src={pokemon.image} alt={pokemon.name} />
+          {pokemon.name}
+        </li>
     ))}
     </ul>
   );
