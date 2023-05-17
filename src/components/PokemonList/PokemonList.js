@@ -1,4 +1,5 @@
 import React, {useState, useEffect}   from "react";
+import PokemonCard from "./PokemonCard";
 
 function PokemonList({ searchTerm = "" }) {
 
@@ -14,6 +15,8 @@ function PokemonList({ searchTerm = "" }) {
     console.log("data", data.results);
     setPokemons(await getSprite(data.results)); 
   }
+
+  
   async function getSprite(pokemons) {
     const pokemonWithSprites = await Promise.all(
       pokemons.map(async (pokemon) => {
@@ -28,21 +31,23 @@ function PokemonList({ searchTerm = "" }) {
     return pokemonWithSprites;
   }
 
+
   const filteredPokemons = pokemons.filter((pokemon) =>
     pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
 
   return (
-
-    <ul>
+<div className="pokemon-list" style={{
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center'
+    }}>
     {filteredPokemons.map((pokemon) => (
-      <li key={pokemon.name}>
-          <img src={pokemon.image} alt={pokemon.name} />
-          {pokemon.name}
-        </li>
+      <PokemonCard key={pokemon.name} pokemon={pokemon} />
     ))}
-    </ul>
+  </div>
+
   );
 }
 

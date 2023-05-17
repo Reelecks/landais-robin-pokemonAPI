@@ -10,9 +10,24 @@ const App = () => {
   }
 
   return (
-    <div>
-      <input onChange={handleChange} />
-
+    <div style={{
+      backgroundColor: 'red',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%'
+     }}>
+    <div >
+      <input onChange={handleChange} style={{
+          margin: '20px 0',
+          padding: '10px',
+          width: '300px',
+          borderRadius: '5px',
+          border: 'none',
+          outline: 'none',
+        }} />
+</div>
       <PokemonList searchTerm={search} />
     </div>
   );
